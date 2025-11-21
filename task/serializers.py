@@ -5,7 +5,7 @@ from django.utils.timezone import localdate
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ['all']
+        fields = '__all__'
         read_only_fields = ['id', 'created_at', 'updated_at']
 
     def validate_due_date(self, value):
