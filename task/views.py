@@ -12,7 +12,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def toggle_complete(self, request, pk=None):
         task = self.get_object()
-        Task.objects.filter(id=task.id).update(is_completed=not task.is_completed)
+        Task.objects.filter(id=task.id).update(is_complete=not task.is_complete)
         task.refresh_from_db()
         serializer = TaskSerializer(task)
         return Response(serializer.data, status=status.HTTP_200_OK)
