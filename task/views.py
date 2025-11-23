@@ -13,7 +13,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     filterset_fields = ['is_complete', 'priority']
     search_fields = ['^title']
     ordering_fields = ['due_date', 'created_at']
-    ordering = ['created_at', 'priority', 'is_complete']
+    ordering = ['is_complete', 'due_date', 'priority']
 
     @action(detail=True, methods=['post'])
     def toggle_complete(self, request, pk=None):
