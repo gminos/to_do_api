@@ -1,7 +1,7 @@
 from django.db import models
 
 
-PRIORITIES = [("low", "Low"),("medium", "Medium"),("high", "High")]
+PRIORITIES = [(3, "Low"),(2, "Medium"),(1, "High")]
 
 class Task(models.Model):
     title = models.CharField(max_length=200, blank=False)
@@ -10,4 +10,4 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     due_date = models.DateField(null=True, blank=True)
-    priority = models.CharField(max_length=10, blank=True, null=True, choices=PRIORITIES)
+    priority = models.IntegerField(blank=False, null=False, choices=PRIORITIES, default=3)
