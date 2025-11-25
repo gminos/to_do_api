@@ -35,7 +35,17 @@ Este proyecto implementa las mejores prácticas de desarrollo backend, incluyend
     ```
 
 3.  **Configurar variables de entorno:**
-    Crea un archivo `.env` en la raíz basado en el ejemplo (necesitarás configurar tu DB y SECRET_KEY).
+    Crea un archivo `.env` en la raíz basado en el siguiente ejemplo:
+    ```env
+    DJANGO_SECRET_KEY=tu_clave_secreta_super_segura
+    DJANGO_DEBUG=true
+    DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
+    POSTGRES_DB=nombre_tu_base_datos
+    POSTGRES_USER=usuario_postgres
+    POSTGRES_PASSWORD=password_postgres
+    POSTGRES_HOST=localhost
+    POSTGRES_PORT=5432
+    ```
 
 4.  **Aplicar migraciones:**
     ```bash
