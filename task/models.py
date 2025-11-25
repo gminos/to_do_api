@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 PRIORITIES = [(3, "Low"),(2, "Medium"),(1, "High")]
@@ -11,3 +12,5 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     due_date = models.DateField(null=True, blank=True)
     priority = models.IntegerField(choices=PRIORITIES, default=3)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
+    

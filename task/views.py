@@ -9,12 +9,17 @@ from task.models import Task
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
-    queryset = Task.objects.all()
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['is_complete', 'priority']
     search_fields = ['^title']
     ordering_fields = ['due_date', 'created_at']
     ordering = ['is_complete', 'due_date', 'priority']
+
+    def get_queryset(self):
+        return Task.objects.filter(owner=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
     @action(detail=True, methods=['post'])
     def toggle_complete(self, request, pk=None):
