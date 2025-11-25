@@ -1,15 +1,16 @@
+from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status, viewsets, filters
+from rest_framework import status, viewsets, filters, generics, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .serializers import TaskSerializer
-from .models import Task
+from task.serializers import TaskSerializer, UserSerializer
+from task.models import Task
 
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter ,filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['is_complete', 'priority']
     search_fields = ['^title']
     ordering_fields = ['due_date', 'created_at']
@@ -22,3 +23,9 @@ class TaskViewSet(viewsets.ModelViewSet):
         task.refresh_from_db()
         serializer = TaskSerializer(task)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class RegisterCreateAPIView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    permission_classes = [permissions.AllowAny]
