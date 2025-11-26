@@ -16,15 +16,20 @@ services:
     restart: always
 
   db:
-    image: postgres:16-alpine
-    container_name: postgres
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     env_file:
       - ./backend/.env
     ports:
-      - "127.0.0.1:5433:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: always
+      - "5433:5432"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
