@@ -52,10 +52,23 @@ Este proyecto implementa las mejores prácticas de desarrollo backend, incluyend
     uv run manage.py migrate
     ```
 
-5.  **Correr el servidor:**
+5.  **Correr el servidor (Modo Local):**
     ```bash
     uv run manage.py runserver
     ```
+
+## Ejecución con Docker (Recomendado)
+
+Si prefieres no instalar dependencias en tu máquina, usa Docker:
+
+1.  Asegúrate de tener Docker y Docker Compose instalados.
+2.  Crea el archivo `.env` como se indicó arriba.
+3.  Ejecuta:
+    ```bash
+    docker compose up --build
+    ```
+4.  La API estará disponible en: [http://localhost:8001/api/docs/](http://localhost:8001/api/docs/)
+    *(Nota: La configuración de Docker usará el puerto 8001 para evitar conflictos)*
 
 ## Documentación de la API
 
