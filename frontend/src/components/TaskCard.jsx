@@ -62,7 +62,7 @@ const TaskCard = ({ task, onToggle, onDelete }) => {
             <button
                 onClick={() => onDelete(task.id)}
                 className="absolute top-4 right-4 p-2 text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 
-          opacity-0 group-hover:opacity-100 transition-all duration-200 translate-x-2 group-hover:translate-x-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg"
+          opacity-0 group-hover:opacity-100 transition-all duration-200 translate-x-2 group-hover:translate-x-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg cursor-pointer"
                 title="Eliminar tarea"
             >
                 <Trash2 className="w-4 h-4" />
