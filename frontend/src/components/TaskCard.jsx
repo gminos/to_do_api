@@ -1,61 +1,71 @@
 import React from 'react';
-import { CheckCircle, Circle, Trash2, Calendar } from 'lucide-react';
+import { CheckCircle2, Circle, Trash2, Calendar, Clock } from 'lucide-react';
 
-const priorityColors = {
-    1: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800',    // High
-    2: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', // Medium
-    3: 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-800', // Low
-};
-
-const priorityLabels = {
-    1: 'Alta',
-    2: 'Media',
-    3: 'Baja',
+const priorityConfig = {
+    1: { label: 'Alta', color: 'text-red-600 bg-red-50 border-red-100 dark:bg-red-900/20 dark:text-red-300 dark:border-red-800/30' },
+    2: { label: 'Media', color: 'text-amber-600 bg-amber-50 border-amber-100 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800/30' },
+    3: { label: 'Baja', color: 'text-emerald-600 bg-emerald-50 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-300 dark:border-emerald-800/30' },
 };
 
 const TaskCard = ({ task, onToggle, onDelete }) => {
+    const priority = priorityConfig[task.priority];
+
     return (
-        <div className={`group bg-white dark:bg-gray-800 p-4 rounded-xl border transition-all duration-200 hover:shadow-md flex items-start gap-4
-      ${task.is_complete ? 'border-gray-200 bg-gray-50 opacity-75 dark:border-gray-700 dark:bg-gray-800/50' : 'border-gray-200 dark:border-gray-700'}
+        <div className={`group glass-card p-5 rounded-2xl flex items-start gap-4 relative overflow-hidden
+      ${task.is_complete ? 'opacity-60 grayscale-[0.5]' : ''}
     `}>
             <button
                 onClick={() => onToggle(task.id)}
-                className={`mt-1 flex-shrink-0 transition-colors ${task.is_complete ? 'text-indigo-500 dark:text-indigo-400' : 'text-gray-300 hover:text-indigo-500 dark:text-gray-600 dark:hover:text-indigo-400'}`}
+                className={`mt-0.5 flex-shrink-0 transition-all duration-300 transform hover:scale-110 
+          ${task.is_complete ? 'text-primary-500' : 'text-gray-300 hover:text-primary-500 dark:text-gray-600'}
+        `}
             >
-                {task.is_complete ? <CheckCircle className="w-6 h-6" /> : <Circle className="w-6 h-6" />}
+                {task.is_complete ? (
+                    <CheckCircle2 className="w-6 h-6 fill-primary-50 dark:fill-primary-900/20" />
+                ) : (
+                    <Circle className="w-6 h-6" />
+                )}
             </button>
 
-            <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                    <h3 className={`font-semibold text-lg truncate ${task.is_complete ? 'line-through text-gray-500 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100'}`}>
+            <div className="flex-1 min-w-0 z-10 pr-10">
+                <div className="flex items-center gap-3 mb-2">
+                    <h3 className={`font-semibold text-lg leading-tight transition-all truncate
+            ${task.is_complete ? 'line-through text-gray-500' : 'text-gray-900 dark:text-white'}
+          `}>
                         {task.title}
                     </h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${priorityColors[task.priority]}`}>
-                        {priorityLabels[task.priority]}
+                    <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border font-semibold flex-shrink-0 ${priority.color}`}>
+                        {priority.label}
                     </span>
                 </div>
 
                 {task.description && (
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{task.description}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mb-4 line-clamp-2 leading-relaxed">
+                        {task.description}
+                    </p>
                 )}
 
-                <div className="flex items-center gap-4 text-xs text-gray-400 dark:text-gray-500">
+                <div className="flex items-center gap-4 text-xs text-gray-400 dark:text-gray-500 font-medium">
                     {task.due_date && (
-                        <div className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            <span>{task.due_date}</span>
+                        <div className={`flex items-center gap-1.5 ${new Date(task.due_date) < new Date() && !task.is_complete ? 'text-red-500' : ''}`}>
+                            <Calendar className="w-3.5 h-3.5" />
+                            <span>{new Date(task.due_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
                         </div>
                     )}
-                    <span>Creado: {new Date(task.created_at).toLocaleDateString()}</span>
+                    <div className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5" />
+                        <span>{new Date(task.created_at).toLocaleDateString()}</span>
+                    </div>
                 </div>
             </div>
 
             <button
                 onClick={() => onDelete(task.id)}
-                className="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-2"
+                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 
+          opacity-0 group-hover:opacity-100 transition-all duration-200 translate-x-2 group-hover:translate-x-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg"
                 title="Eliminar tarea"
             >
-                <Trash2 className="w-5 h-5" />
+                <Trash2 className="w-4 h-4" />
             </button>
         </div>
     );
