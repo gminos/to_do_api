@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import TaskCard from '../components/TaskCard';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import ConfirmModal from '../components/ConfirmModal';
 import { Plus, Loader2, Sparkles, X } from 'lucide-react';
 
 const Dashboard = () => {
@@ -11,6 +12,7 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [greeting, setGreeting] = useState('');
+    const [confirmDelete, setConfirmDelete] = useState({ isOpen: false, taskId: null });
 
     const [newTask, setNewTask] = useState({ title: '', description: '', priority: 3, due_date: '' });
 
@@ -62,11 +64,16 @@ const Dashboard = () => {
         }
     };
 
-    const handleDelete = async (id) => {
-        if (!window.confirm('¿Estás seguro de eliminar esta tarea?')) return;
+    const handleDelete = (id) => {
+        setConfirmDelete({ isOpen: true, taskId: id });
+    };
+
+    const confirmDeleteTask = async () => {
+        const id = confirmDelete.taskId;
         try {
             await api.delete(`/api/tasks/${id}/`);
             setTasks(tasks.filter(t => t.id !== id));
+            setConfirmDelete({ isOpen: false, taskId: null });
         } catch (error) {
             console.error('Error deleting task:', error);
         }
@@ -177,6 +184,15 @@ const Dashboard = () => {
                     ))}
                 </div>
             )}
+
+            <ConfirmModal
+                isOpen={confirmDelete.isOpen}
+                onClose={() => setConfirmDelete({ isOpen: false, taskId: null })}
+                onConfirm={confirmDeleteTask}
+                title="¿Eliminar tarea?"
+                message="Esta acción no se puede deshacer. La tarea será eliminada permanentemente de tu lista."
+                confirmText="Eliminar Tarea"
+            />
         </Layout>
     );
 };
